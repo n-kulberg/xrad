@@ -5,6 +5,7 @@
 */
 #include "pre.h"
 #include "ChartZoom.h"
+#include <qwt_scale_map.h>
 
 //TODO: переименовать класс и файл, как сделано с прочими
 namespace XRAD_GUI
