@@ -228,6 +228,7 @@ enum	window_function_e
 	e_triangular_window,
 	e_bartlett_window = e_triangular_window,
 	e_cos2_window,
+	e_hann_window = e_cos2_window,
 	e_hamming_window,
 	e_nuttall_window,
 	e_blackman_harris_window,

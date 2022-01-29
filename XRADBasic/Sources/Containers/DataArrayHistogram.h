@@ -104,6 +104,28 @@ Histogram ComputeHistogramRaw(const DataArray<T> &array, const range1_F64 &value
 	return histogram;
 }
 
+
+template <class Histogram = DataArray<size_t>, class T = void /* dummy default: always deduced */>
+Histogram ComputeComponentsHistogram(const DataArray<T>& array, const range1_F64& values_range, size_t histogram_size)
+{
+	Histogram histogram(histogram_size, 0);
+	size_t less_counter(0), greater_counter(0);
+	Functors::acquire_histogram_functor<Histogram> hf(&histogram, &less_counter, &greater_counter,
+		values_range.p1(), values_range.p2());
+
+	auto	lambda = [&hf](const T& x) 
+	{
+		for (size_t i = 0; i < n_components(x); ++i) hf(component(x, i));
+	};
+
+	Apply_A_1D_F1(array, lambda);
+	histogram[0] += (typename Histogram::value_type)less_counter;
+	histogram[histogram.size() - 1] += (typename Histogram::value_type)greater_counter;
+	return histogram;
+}
+
+
+
 /*!
 	\brief Расчет гистограммы преобразованного массива [переделать тип function на result_type f(value)]
 
