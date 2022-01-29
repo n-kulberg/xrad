@@ -15,104 +15,102 @@ XRAD_BEGIN
 //	Window function
 //
 //--------------------------------------------------------------
-
-template <XRAD__MathFunction_template>
-void ApplyWindowFunction(MathFunction<XRAD__MathFunction_template_args> &function, const window_function &w_left, const window_function &w_right, size_t s0, size_t s1)
+namespace window_function_private
 {
-	if(!s1) s1 = function.size();
-	if(s1<=s0)
-	{
-		function.fill(zero_value(function[0]));
-		return;
-	}
-	size_t	s = s1-s0;
-	if(s < 3) return;
 
-	auto it = function.begin();
-	auto window_start = it + s0;
-	auto window_middle = window_start + s/2;
-	auto window_end = window_start + s;
-	auto it_end = function.end();
+class	wf_generator
+{
 
 
-	for(; it < window_start; ++it)
-	{
-		*it = T(0);
-	}
+	//! \brief Вычисление веса окна от double на отрезке (0,1)
+	virtual double	calculate(double x) const = 0;
 
-	size_t	i = 0;
-	for(; it < window_middle; ++it,++i)
-	{
-		*it *= w_left(i, s);
-	}
+public:
+// Вычисление веса от дискретного аргумента для окна длины N.
+// Возможны три варианта, о выборе подумать.
+//	Вариант с https://en.wikipedia.org/wiki/Window_function : { return operator()(double(n)/double(N-1)); }
+// приводит к обнулению концов отрезка на многих окнах.
+//! Здесь нули подразумеваются за пределами отрезка, кажется, должно быть более правильно
+	virtual double	operator()(size_t n, size_t N) const { return calculate(double(n + 1) / double(N + 1)); }
+// Промежуточный вариант между 1 и 2. Для приподнятого косинуса сохраняет разбиение единицы
+//virtual double	operator()(size_t n, size_t N) const { return operator()((double(n)+0.5)/double(N)); }
+	virtual ~wf_generator() {}
 
-	for(; it < window_end; ++it,++i)
-	{
-		*it *= w_right(i, s);
-	}
+};
 
-	for(; it < it_end; ++it)
-	{
-		*it = T(0);
-	}
+
+
+
+RealFunctionF64 create(const wf_generator& w_left, const wf_generator& w_right, size_t size, size_t s0 = 0, size_t s1 = 0);
+
+template <typename ...args>
+void apply(MathFunction<args...> &function, const wf_generator & w_left, const wf_generator & w_right, size_t s0, size_t s1)
+{
+	auto wf = create(w_left, w_right, function.size(), s0, s1);
+	function *= wf;
+
 }
 
-template <XRAD__MathFunction_template>
-void ApplyWindowFunction(MathFunction<XRAD__MathFunction_template_args> &function, const window_function &win, size_t s0, size_t s1)
+template <typename ...args>
+void apply(MathFunction<args...> &function, const wf_generator & win, size_t s0, size_t s1)
 {
-	ApplyWindowFunction(function, win, win, s0, s1);
+	apply(function, win, win, s0, s1);
 }
 
-template <XRAD__MathFunction_template>
-void CreateWindowFunction(MathFunction<XRAD__MathFunction_template_args> &function, const window_function &w_left, const window_function &w_right, size_t s0, size_t s1)
+template <typename ...args>
+void create(MathFunction<args...> &function, const wf_generator & w_left, const wf_generator & w_right, size_t s0, size_t s1)
 {
-	function.fill(T(1));
-	ApplyWindowFunction(function, w_left, w_right, s0, s1);
+	using value_type = typename MathFunction<args...>::value_type;
+	function.fill(value_type(1));
+	apply(function, w_left, w_right, s0, s1);
 }
 
-template <XRAD__MathFunction_template>
-void CreateWindowFunction(MathFunction<XRAD__MathFunction_template_args> &function, const window_function &win, size_t s0, size_t s1)
+template <typename ...args>
+void create(MathFunction<args...> &function, const wf_generator & win, size_t s0, size_t s1)
 {
-	function.fill(T(1));
-	ApplyWindowFunction(function, win, s0, s1);
+	function.fill(typename MathFunction<args...>::value_type(1));
+	apply(function, win, s0, s1);
 }
 
+unique_ptr<window_function_private::wf_generator> GetWindowFunctionByEnum(window_function_e);
+
+}//window_function_private
 
 
 //--------------------------------------------------------------
 
 
 
-template <XRAD__MathFunction_template>
-void ApplyWindowFunction(MathFunction<XRAD__MathFunction_template_args> &function, window_function_e ew_left, window_function_e ew_right, size_t s0, size_t s1)
+template <typename ...args>
+void ApplyWindowFunction(MathFunction<args...> &function, window_function_e ew_left, window_function_e ew_right, size_t s0, size_t s1)
 {
-	shared_ptr<window_function>	w_left = GetWindowFunctionByEnum(ew_left);
-	shared_ptr<window_function>	w_right = GetWindowFunctionByEnum(ew_right);
+	unique_ptr<window_function_private::wf_generator>	w_left = window_function_private::GetWindowFunctionByEnum(ew_left);
+	unique_ptr<window_function_private::wf_generator>	w_right = window_function_private::GetWindowFunctionByEnum(ew_right);
 
-	ApplyWindowFunction(function, *w_left, *w_right, s0, s1);
+	window_function_private::apply(function, *w_left, *w_right, s0, s1);
 }
 
-template <XRAD__MathFunction_template>
-void ApplyWindowFunction(MathFunction<XRAD__MathFunction_template_args> &function, window_function_e ewin, size_t s0, size_t s1)
+template <typename ...args>
+void ApplyWindowFunction(MathFunction<args...> &function, window_function_e ewin, size_t s0, size_t s1)
 {
-	shared_ptr<window_function>	win = GetWindowFunctionByEnum(ewin);
-	ApplyWindowFunction(function, *win, s0, s1);
+	unique_ptr<window_function_private::wf_generator>	win = window_function_private::GetWindowFunctionByEnum(ewin);
+	window_function_private::apply(function, *win, s0, s1);
 }
 
-template <XRAD__MathFunction_template>
-void CreateWindowFunction(MathFunction<XRAD__MathFunction_template_args> &function, window_function_e ew_left, window_function_e ew_right, size_t s0, size_t s1)
+template <typename ...args>
+void CreateWindowFunction(MathFunction<args...> &function, window_function_e ew_left, window_function_e ew_right, size_t s0, size_t s1)
 {
-	shared_ptr<window_function>	w_left = GetWindowFunctionByEnum(ew_left);
-	shared_ptr<window_function>	w_right = GetWindowFunctionByEnum(ew_right);
+	unique_ptr<window_function_private::wf_generator>	w_left = window_function_private::GetWindowFunctionByEnum(ew_left);
+	unique_ptr<window_function_private::wf_generator>	w_right = window_function_private::GetWindowFunctionByEnum(ew_right);
 
-	CreateWindowFunction(function, *w_left, *w_right, s0, s1);
+	window_function_private::create(function, *w_left, *w_right, s0, s1);
 }
 
-template <XRAD__MathFunction_template>
-void CreateWindowFunction(MathFunction<XRAD__MathFunction_template_args> &function, window_function_e ewin, size_t s0, size_t s1)
+template <typename ...args>
+void CreateWindowFunction(MathFunction<args...> &function, window_function_e ewin, size_t s0, size_t s1)
 {
-	shared_ptr<window_function>	win = GetWindowFunctionByEnum(ewin);
-	CreateWindowFunction(function, *win, s0, s1);
+	unique_ptr<window_function_private::wf_generator>	win = window_function_private::GetWindowFunctionByEnum(ewin);
+	window_function_private::create(function, *win, s0, s1);
 }
 
 

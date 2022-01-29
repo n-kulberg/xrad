@@ -15,14 +15,11 @@
 */
 //--------------------------------------------------------------
 
-#include "Sources/Containers/RealFunction.h"
-#include "Sources/Containers/ComplexFunction.h"
-#include "Sources/SampleTypes/ColorSample.h"
-#include "Sources/Containers/ColorContainer.h"
+#include <XRADBasic/Sources/Containers/RealFunction.h>
+#include <XRADBasic/Sources/Containers/ComplexFunction.h>
+#include <XRADBasic/Sources/SampleTypes/ColorSample.h>
+#include <XRADBasic/Sources/Containers/ColorContainer.h>
 
-// TODO: Убрать эту зависимость?
-#include "Sources/Containers/WindowFunction.h"
-#include "Sources/Containers/UniversalInterpolation.h"
 
 XRAD_BEGIN
 

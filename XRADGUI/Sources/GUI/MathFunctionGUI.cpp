@@ -11,6 +11,7 @@
 #include <XRADBasic/Sources/SampleTypes/HLSColorSample.h>
 #include <XRADBasic/FFT1D.h>
 #include <XRADGUI/Sources/GUI/DynamicDialog.h>
+#include <XRADBasic/Sources/Containers/WindowFunction.h>
 
 XRAD_BEGIN
 

@@ -294,7 +294,7 @@ real_interpolator_container CalculateSincHilbertInterpolator(size_t filter_order
 
 
 	//blackman_nuttall_win	window_function;
-	nuttall_window	window_function;
+	//nuttall_window	window_function;
 	//abstract_window_function	window_function;
 
 	for(size_t i = 0; i < filter_order; i++)
