@@ -30,35 +30,50 @@ XRAD_BEGIN
 //--------------------------------------------------------------
 
 
-
-enum	window_function_e
+namespace window_function
 {
-	e_constant_window = 0,
-	e_triangular_window,
-	e_bartlett_window = e_triangular_window,
-	e_cos2_window,
-	e_hann_window = e_cos2_window,
-	e_hamming_window,
-	e_nuttall_window,
-	e_blackman_harris_window,
-	e_blackman_nuttall_window,
-	e_flat_top_window,
+	enum	type
+	{
+		constant = 0,
+		triangular,
+		bartlett = triangular,
+		cos2,
+		hann = cos2,
+		hamming,
+		nuttall,
+		blackman_harris,
+		blackman_nuttall,
+		flat_top,
 
-	n_window_functions
-};
+		n_window_functions
+	};
+
+	string	name(type);
+
+
+	template <typename ...args> void apply(MathFunction<args...>& original, window_function::type win_left, window_function::type win_right, size_t left_indent = 0, size_t right_indent = 0);
+	template <typename ...args> void apply(MathFunction<args...>& original, window_function::type win, size_t left_indent = 0, size_t right_indent = 0);
+
+	template <typename ...args> void create(MathFunction<args...>& original, window_function::type win_left, window_function::type win_right, size_t left_indent = 0, size_t right_indent = 0);
+	template <typename ...args> void create(MathFunction<args...>& original, window_function::type win, size_t left_indent = 0, size_t right_indent = 0);
+
+	RealFunctionF64 create(const window_function::type w_left, const window_function::type w_right, size_t size, size_t left_indent = 0, size_t right_indent = 0);
+	RealFunctionF64 create(const window_function::type win, const size_t size, size_t left_indent = 0, size_t right_indent = 0);
+
+}//namespace window_function
+
 
 //	Вычисление оконной функции заданного размера
 //	Возможно несимметричное окно, состоящее	из двух половинок стандартных окон.
 
 
-template <typename ...args> void ApplyWindowFunction(MathFunction<args...>& original, window_function_e win_left, window_function_e win_right, size_t s0 = 0, size_t s1 = 0);
-template <typename ...args> void ApplyWindowFunction(MathFunction<args...>& original, window_function_e win, size_t s0 = 0, size_t s1 = 0);
-
-template <typename ...args> void CreateWindowFunction(MathFunction<args...>& original, window_function_e win_left, window_function_e win_right, size_t s0 = 0, size_t s1 = 0);
-template <typename ...args> void CreateWindowFunction(MathFunction<args...>& original, window_function_e win, size_t s0 = 0, size_t s1 = 0);
-
-string	GetWindowFunctionName(window_function_e);
-
+#if 0
+//Legacy definitions may be used to make work old code. 
+using window_function_e = window_function::type;
+#define ApplyWindowFunction window_function::apply
+#define CreateWindowFunction window_function::create
+#define GetWindowFunctionName window_function::name;
+#endif
 
 
 XRAD_END

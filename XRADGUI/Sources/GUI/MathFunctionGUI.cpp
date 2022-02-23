@@ -31,24 +31,24 @@ complex_function_oscillation AskOscillation()
 }
 
 
-vector<Button<window_function_e>> CreateWindowFunctionsButtons()
+vector<Button<window_function::type>> CreateWindowFunctionsButtons()
 {
 
 	auto window_types =
 	{
-		e_constant_window,
-		e_triangular_window,
-		e_cos2_window,
-		e_hamming_window,
-		e_nuttall_window,
-		e_blackman_harris_window,
-		e_blackman_nuttall_window,
-		e_flat_top_window
+		window_function::constant,
+		window_function::triangular,
+		window_function::cos2,
+		window_function::hamming,
+		window_function::nuttall,
+		window_function::blackman_harris,
+		window_function::blackman_nuttall,
+		window_function::flat_top
 	};
-	vector<Button<window_function_e>> buttons;
+	vector<Button<window_function::type>> buttons;
 	for(auto type: window_types)
 	{
-		buttons.push_back(MakeButton(GetWindowFunctionName(type), type));
+		buttons.push_back(MakeButton(window_function::name(type), type));
 	}
 
 	return buttons;
@@ -58,21 +58,21 @@ vector<Button<window_function_e>> CreateWindowFunctionsButtons()
 const	bool	preferred_data_roll_direction = false;
 const	bool	preferred_spectrum_roll_direction = true;
 
-void ShowWindowFunction(size_t n, window_function_e wfe, bool roll_before)
+void ShowWindowFunction(size_t n, window_function::type wfe, bool roll_before)
 {
 	SafeExecute([&]()
 	{
 		ComplexFunctionF32 window_function(n, complexF32(1));
-		ApplyWindowFunction(window_function, wfe);
+		window_function::apply(window_function, wfe);
 		DisplayMathFunction(window_function, 0, 1,
 				ssprintf("Window function: %s",
-						EnsureType<const char*>(GetWindowFunctionName(wfe).c_str())));
+						EnsureType<const char*>(window_function::name(wfe).c_str())));
 		if(roll_before)
 		{
 			window_function.roll_half(preferred_data_roll_direction);
 			DisplayMathFunction(window_function, 0, 1,
 								ssprintf("Window function rolled: %s",
-								EnsureType<const char*>(GetWindowFunctionName(wfe).c_str())));
+								EnsureType<const char*>(window_function::name(wfe).c_str())));
 		}
 	});
 }
@@ -412,7 +412,7 @@ void	grafc(const ComplexFunctionF64 &data, const wstring &data_title,
 						bool	roll_spectrum_after_ft = false;
 						bool	view_window_function = false;
 
-						window_function_e wfe = e_constant_window;
+						window_function::type wfe = window_function::constant;
 
 						auto window_selection = DynamicDialog::EnumRadioButtonChoice::Create(L"Window function", 
 										CreateWindowFunctionsButtons(),
@@ -437,7 +437,7 @@ void	grafc(const ComplexFunctionF64 &data, const wstring &data_title,
 
 						ComplexFunctionF64	spectrum(data);
 												
-						ApplyWindowFunction(spectrum, wfe);
+						window_function::apply(spectrum, wfe);
 						
 						if(roll_data_before_ft) spectrum.roll_half(preferred_data_roll_direction);
 
