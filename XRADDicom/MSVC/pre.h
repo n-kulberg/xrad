@@ -8,6 +8,9 @@
 //--------------------------------------------------------------
 
 // XRAD
+
+#define XRAD_STANDALONE_COMPLEX 0
+
 #include <XRADBasic/Core.h>
 #include <XRADSystem/System.h>
 

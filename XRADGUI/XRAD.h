@@ -6,6 +6,8 @@
 #ifndef XRAD__XRAD_h
 #define XRAD__XRAD_h
 
+#define XRAD_STANDALONE_COMPLEX 0
+
 #include <XRADBasic/Core.h>
 
 #include <XRADBasic/MathFunctionTypesMD.h>

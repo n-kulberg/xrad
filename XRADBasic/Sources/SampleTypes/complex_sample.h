@@ -3,15 +3,11 @@
 	All rights reserved.
 	This file is licensed under BSD-3-Clause license. See LICENSE file for details.
 */
-// file complex_sample.h
+// \file complex_sample.h
 //
 // A part of XRAD
 // Complex numbers library for scientific calculations.
 //
-// 2014 KNS typedefs complexF/complexD --> complexF32/complexF64
-// 2013 KNS class complexF --> template<class PT, class ST> complex_sample{}
-// 1999 Modified by ACS (Алексей Борисович Елизаров) (added constructor with SNoInit)
-// 19?? class complexF created by Nicholas S. Kulberg (Кульберг Николай Сергеевич)
 //--------------------------------------------------------------
 #ifndef XRAD__File_complex_sample_h
 #define XRAD__File_complex_sample_h
@@ -28,18 +24,16 @@
 	#include <XRADBasic/Sources/Core/NumberTraits.h>
 	#include "HomomorphSamples.h"
 	#include <type_traits>
+#else
+namespace xrad 
+{
+	constexpr double degrees_per_radian() { return 180. / 3.14159265358979323846; }
+	constexpr double radians_per_degree() { return 3.14159265358979323846 / 180.; }
+	template<class T> double norma(const T &x) { return abs(x); }
+}//namespace xrad
 #endif //XRAD_STANDALONE_COMPLEX
 
 namespace xrad {
-
-
-	//--------------------------------------------------------------
-	//
-	// шаблон complex_sample<scalar>
-	// "~" комплексное сопряжение
-	// "%", "%=" умножение на комплексно сопряженное
-	//
-	//--------------------------------------------------------------
 
 
 	enum class complex_number_part
@@ -50,16 +44,18 @@ namespace xrad {
 
 
 	/*!
-		\brief Комплексное число
+		\brief Complex-valued number
 
-		PT должен быть неконстантным.
-		Использование complex_sample<const PT, ST> считаем неправильным.
-		Там, где требуется константность, следует использовать const complex_sample<PT, ST>.
+		PT is the type of complex number, must be nonconst scalar numeric type
+		ST is the type of scalar multiplier
+
+		'operator ~' is  complex conjugation (like unary '-' operator)
+		'operator %", "%=' mean multiplication by conjugated number
 	*/
 	template<class PT, class ST>
 	class complex_sample
 	{
-		// Запрещаем использование complex_sample<const PT, ST> явным образом.
+		// prohibit use of 'complex_sample<const PT, ST>'
 		static_assert(!std::is_const<PT>::value, "Error: Using complex_sample<PT, ST> with const PT type. PT must not be const. Use const complex_sample<PT, ST> instead.");
 	public:
 		typedef	PT part_type;
@@ -73,26 +69,23 @@ namespace xrad {
 		//	constructors
 
 		complex_sample() {}
-		// конструктор по умолчанию -- без инициализации
+		// No initialization in default constructor
 
 		explicit complex_sample(PT r) { re = r; im = 0; }
-		// explicit обязательно во избежание
-		// случайных появлений комплексных чисел вместо действительных
+		// 'explicit' prohibits accidental appearance of complex numbers instead of real ones
 
 		complex_sample(PT r, PT i) { re = r; im = i; }
 
 		template<class PT1, class ST1>
 		complex_sample(const complex_sample<PT1, ST1>& c) { re = c.re; im = c.im; }
 
-		// assignments
-
+		// Assignments
 		template<class PT1, class ST1>
 		complex_sample& operator = (const complex_sample<PT1, ST1>& y) { re = y.re; im = y.im; return *this; }
 
 		complex_sample<PT, ST>& operator = (PT y) { re = y; im = 0; return *this; }
 
-		// unary arithmetics
-
+		// Unary arithmetics
 		complex_sample<PT, ST> operator-() const { return complex_sample<PT, ST>(-re, -im); }
 		complex_sample<PT, ST> operator~() const { return complex_sample<PT, ST>(re, -im); }
 
@@ -102,8 +95,7 @@ namespace xrad {
 		complex_sample<PT, ST> operator++(int) { complex_sample<PT, ST> result(*this); re++; return result; }
 		complex_sample<PT, ST> operator--(int) { complex_sample<PT, ST> result(*this); re--; return result; }
 
-		// assignment arithmetic
-
+		// Assignment arithmetic
 		template<class PT1, class ST1>
 		complex_sample<PT, ST>& operator += (const complex_sample<PT1, ST1>& y);
 
@@ -118,15 +110,13 @@ namespace xrad {
 
 		template<class PT1, class ST1>
 		complex_sample<PT, ST>& operator /= (const complex_sample<PT1, ST1>& y);
-		//
+
 		complex_sample<PT, ST>& operator += (PT y) { re += y; return *this; }
 		complex_sample<PT, ST>& operator -= (PT y) { re -= y; return *this; }
 		complex_sample<PT, ST>& operator *= (ST y) { re *= y; im *= y; return *this; }
 		complex_sample<PT, ST>& operator /= (ST y) { re /= y; im /= y; return *this; }
-		//
 
-		// arithmetic
-
+		// Arithmetic
 		template<class PT1, class ST1>
 		complex_sample<PT, ST> operator + (const complex_sample<PT1, ST1>& y) const { return complex_sample<PT, ST>(*this) += y; }
 		template<class PT1, class ST1>
@@ -145,22 +135,21 @@ namespace xrad {
 
 
 
-		// тернарные действия, результат над двумя аргументами помещается в *this. позволяет избежать
-		// создания буферных переменных при операциях вида a=b+c;
 
 		template<class PT1, class ST1>
 		complex_sample<PT, ST>& conjugate(const complex_sample<PT1, ST1>& x) { re = x.re; im = -im.re; return *this; }
 
-		// действия вида (*this)=x*y с комплексными числами
+		// Ternary actions, result of binary operation is placed to *this.
+		// Calling 'a.add(b,c)' avoids creating buffer variables in operations like 'a=b+c'.
 		template<class PT1, class ST1, class PT2, class ST2>
 		complex_sample<PT, ST>& add(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y);
 		template<class PT1, class ST1, class PT2, class ST2>
-		complex_sample<PT, ST>& add_i(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y);
+		complex_sample<PT, ST>& add_i(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y); // x + i*y
 
 		template<class PT1, class ST1, class PT2, class ST2>
 		complex_sample<PT, ST>& subtract(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y);
 		template<class PT1, class ST1, class PT2, class ST2>
-		complex_sample<PT, ST>& subtract_i(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y);
+		complex_sample<PT, ST>& subtract_i(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y); // x - i*y
 
 		template<class PT1, class ST1, class PT2, class ST2>
 		complex_sample<PT, ST>& multiply(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y);
@@ -172,9 +161,7 @@ namespace xrad {
 		template<class PT1, class ST1, class PT2, class ST2>
 		complex_sample<PT, ST>& divide_conj(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y);
 
-
-
-		// действия вида (*this)+=x*y с комплексными числами
+		// Ternary actions like (*this)+=x*y with two complex numbers
 		template<class PT1, class ST1, class PT2, class ST2>
 		complex_sample<PT, ST>& add_multiply(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y);
 		template<class PT1, class ST1, class PT2, class ST2>
@@ -195,18 +182,14 @@ namespace xrad {
 		template<class PT1, class ST1, class PT2, class ST2>
 		complex_sample<PT, ST>& subtract_divide_conj(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y);
 
-
-
-		// действия вида (*this)=x*y с комплексным и скаляром
+		// Ternary actions like (*this)=x*y with complex and scalar number
 		template<class PT1, class ST1>
 		complex_sample<PT, ST>& multiply(const complex_sample<PT1, ST1>& x, const scalar_type& a);
 
 		template<class PT1, class ST1>
 		complex_sample<PT, ST>& divide(const complex_sample<PT1, ST1>& x, const scalar_type& a);
 
-
-
-		// действия вида (*this)+=x*y с комплексным и скаляром
+		// ternary actions (*this)+=x*y with complex and scalar number
 		template<class PT1, class ST1>
 		complex_sample<PT, ST>& add_multiply(const complex_sample<PT1, ST1>& x, const scalar_type& a);
 
@@ -219,46 +202,35 @@ namespace xrad {
 		template<class PT1, class ST1>
 		complex_sample<PT, ST>& subtract_divide(const complex_sample<PT1, ST1>& x, const scalar_type& a);
 
-
-
-		// взвешенное сложение двух массивов, (*this) = x*a1 + y*a2
+		// weighted sum, (*this) = x*a1 + y*a2
 		template<class PT1, class ST1, class PT2, class ST2>
 		complex_sample<PT, ST>& mix(const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y, scalar_type a1, scalar_type a2);
 
-
-
 		// compare
-
 		template<class PT1, class ST1>
-		bool operator == (const complex_sample<PT1, ST1>& x) const { return (re == x.re && im == x.im); }
+		bool operator == (const complex_sample<PT1, ST1>& x) const { return (re == static_cast <PT> (x.re) && im == static_cast <PT> (x.im)); }
 		template<class PT1, class ST1>
-		bool operator != (const complex_sample<PT1, ST1>& x) const { return (re != x.re || im != x.im); }
+		bool operator != (const complex_sample<PT1, ST1>& x) const { return (re != static_cast <PT> (x.re) || im != static_cast <PT> (x.im)); }
 		template<class PT1, class ST1>
-		bool operator < (const complex_sample<PT1, ST1>& x) const { return (re * re + im * im < x.re* x.re + x.im * x.im); }
+		bool operator < (const complex_sample<PT1, ST1>& x) const { return (re * re + (im * im) < static_cast <PT> (x.re* x.re + x.im * x.im)); }
 		template<class PT1, class ST1>
-		bool operator > (const complex_sample<PT1, ST1>& x) const { return (re * re + im * im > x.re * x.re + x.im * x.im); }
+		bool operator > (const complex_sample<PT1, ST1>& x) const { return (re * re + im * im > static_cast <PT> (x.re * x.re + x.im * x.im)); }
 		template<class PT1, class ST1>
-		bool operator <= (const complex_sample<PT1, ST1>& x) const { return (re * re + im * im <= x.re * x.re + x.im * x.im); }
+		bool operator <= (const complex_sample<PT1, ST1>& x) const { return (re * re + im * im <= static_cast <PT> (x.re * x.re + x.im * x.im)); }
 		template<class PT1, class ST1>
-		bool operator >= (const complex_sample<PT1, ST1>& x) const { return (re * re + im * im >= x.re * x.re + x.im * x.im); }
+		bool operator >= (const complex_sample<PT1, ST1>& x) const { return (re * re + im * im >= static_cast <PT> (x.re * x.re + x.im * x.im)); }
 		//
 		bool operator == (PT x) const { return (re == x && !im); }
 		bool operator != (PT x) const { return (re != x || im); }
-		bool operator < (PT x) const { return ((re * re + im * im) < x * fabs(x)); }
-		bool operator > (PT x) const { return ((re * re + im * im) > x * fabs(x)); }
-		bool operator <= (PT x) const { return ((re * re + im * im) <= x * fabs(x)); }
-		bool operator >= (PT x) const { return ((re * re + im * im) >= x * fabs(x)); }
+		bool operator < (PT x) const { return ((re * re + im * im) < static_cast <PT> (norma (x*x))); }
+		bool operator > (PT x) const { return ((re * re + im * im) > static_cast <PT> (norma (x*x))); }
+		bool operator <= (PT x) const { return ((re * re + im * im) <= static_cast <PT> (norma (x*x))); }
+		bool operator >= (PT x) const { return ((re * re + im * im) >= static_cast <PT> (norma (x*x))); }
 
 
-
-		//	определение расстояния между компонентами комплексного числа (вспомогательная функция)
-		//	чаще всего оно равно 1, но выравнивание полей внутри структуры может дать и большее значение
-		//
-		//	функция используется при вычислении шага действительной или мнимой компоненты комплексного массива MathFunctionC.
-		//	писать новый шаг как 2*step() нехорошо, т.к., в общем случае не гарантируется, что sizeof(complex_sample<T>) == 2*sizeof(T).
-		//	теоретически это расстояние может оказаться даже некратным размеру T (sizeof(self) != n*sizeof(T));
-		//	в таком случае использовать функции real(MathFunctionC) и imag(MathFunctionC) нельзя.
-		//	в этом случае при попытке использовать эти функции возникнет ошибка компилятора.
+		//	Distance in memory between components of the complex numbers (in samples)
+		//	In most cases it is equal to 1, but fields alignment inside the structure may result in greater value
+		//	Used for separate extraction of real/imaginary parts in arrays.
 		static ptrdiff_t parts_distance()
 		{
 			enum
@@ -268,7 +240,6 @@ namespace xrad {
 				distance = self_size / part_size
 			};
 			static_assert(distance * part_size == self_size, "complex_sample layout problem.");
-			// если компилятор здесь выдаст ошибку, см. комментарий выше
 
 			return distance;
 		}
@@ -281,15 +252,8 @@ namespace xrad {
 
 	//--------------------------------------------------------------
 	//
-	// number traits definitions. see comment in NumberTraits.h
+	// Number traits definitions. see comment in xrad/number_traits.h (ignore when using standalone)
 	//
-
-	template<class PT, class ST>
-	number_complexity_e complexity_e(const complex_sample<PT, ST>&) { return number_complexity_e::complex; }
-
-	template<class PT, class ST>
-	const number_complexity::complex* complexity_t(const complex_sample<PT, ST>&) { return nullptr; }
-
 	template<class PT, class ST>
 	size_t	n_components(const complex_sample<PT, ST>&) { return 2; }
 
@@ -322,83 +286,79 @@ namespace xrad {
 		template<class PT, class ST>
 	void make_zero(complex_sample<PT, ST>& value) { value = complex_sample<PT, ST>(0); }
 
-	//
-	//--------------------------------------------------------------
-
-
 
 	//--------------------------------------------------------------
 	//
-	//	сопряженное умножение для вычисления
-	//	скалярного произведения. при использовании комплексных
-	//	векторов. занимает место универсального шаблона, объявленного
-	//	в файле NumberTraits.h
+	//	conjugated multiplication used inside the scalar product operator for complex-valued arrays
 	//
 	template<class PT, class PT1, class PT2, class ST, class ST1, class ST2>
 	void	scalar_product_action(complex_sample<PT, ST>& result, const complex_sample<PT1, ST1>& x, const complex_sample<PT2, ST2>& y)
 	{
-		// сопряженное перемножение компонент комплексных векторов
+		// multiplication of a complex 'x' by a conjugated complex 'y'
 		result.add_multiply_conj(x, y);
 	}
 
 	template<class PT, class PT1, class ST, class ST1, class ST2>
 	void	scalar_product_action(complex_sample<PT, ST>& result, const complex_sample<PT1, ST1>& x, const ST2& y)
 	{
-		// умножение комплексного числа на действительное
+		// multiplication of a complex 'x' by a scalar 'y' (for templates compatibility)
 		result.add_multiply(x, y);
 	}
 
 	template<class PT, class PT1, class ST, class ST1, class ST2>
 	void	scalar_product_action(complex_sample<PT, ST>& result, const ST2& x, const complex_sample<PT1, ST1>& y)
 	{
-		// умножение действительного числа на комплексное сопряженное
+		// multiplication of a scalar 'x' by conjugated complex 'y' (for templates compatibility)
 		result.add_multiply(~y, x);
 	}
 
 	template<class PT, class ST, class T1, class T2>
 	void	scalar_product_action(complex_sample<PT, ST>& result, const T1& x, const T2& y)
 	{
-		// перемножение действительных чисел, запись в комплексный результат. такое тоже иногда бывает нужно
+		// multiplication of two real values, result stored to a complex number (for templates compatibility)
 		result += x * y;
 	}
 
-	//
+
 	//--------------------------------------------------------------
-
-
+	//
+	//	Utility
+	//
 
 	template<class T, class ST>
 	inline double	amplitude_to_decibel(const complex_sample<T, ST> a)
 	{
-		return 10. * log10(cabs2(a));//5*(...cabs2) небольшая экономия на вычислении квадратного корня
+		return 10. * log10(cabs2(a));
 	}
 
 	template<class T, class ST>
 	inline double	power_to_decibel(const complex_sample<T, ST> a)
 	{
-		return 5. * log10(cabs2(a));//5*(...cabs2) небольшая экономия на вычислении квадратного корня
+		return 5. * log10(cabs2(a));//5*(...cabs2) save a little on calculating the square root
 	}
 
-
-
 	//--------------------------------------------------------------
-
-
-
-	typedef	complex_sample<float, double> complexF32;
-	typedef	complex_sample<double, double> complexF64;
-
-	typedef	complex_sample<int32_t, double> complexI32F;
-	typedef	complex_sample<int16_t, double> complexI16F;
-	typedef	complex_sample<int8_t, double> complexI8F;
-
-	typedef	complex_sample<int32_t, int> complexI32;
-	typedef	complex_sample<int16_t, int> complexI16;
-	typedef	complex_sample<int8_t, int> complexI8;
-	// для unsigned определений не задаем, нонсенс
+	//
+	//	Predefined types
+	//
+	using complexF32 = complex_sample<float, double>;
+	using complexF64 = complex_sample<double, double>;
+	using complexI32F = complex_sample<int32_t, double>;
+	using complexI16F = complex_sample<int16_t, double>;
+	using complexI8F = complex_sample<int8_t, double>;
+	using complexI32 = complex_sample<int32_t, int>;
+	using complexI16 = complex_sample<int16_t, int>;
+	using complexI8 = complex_sample<int8_t, int>;
+	// No definitions for 'unsigned' types (nonsense)
 
 
 #if !XRAD_STANDALONE_COMPLEX
+
+	template<class PT, class ST>
+	number_complexity_e complexity_e(const complex_sample<PT, ST>&) { return number_complexity_e::complex; }
+
+	template<class PT, class ST>
+	const number_complexity::complex* complexity_t(const complex_sample<PT, ST>&) { return nullptr; }
 
 	//--------------------------------------------------------------
 

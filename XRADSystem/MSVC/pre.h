@@ -6,6 +6,7 @@
 #ifndef XRAD__File_System_pre_h
 #define XRAD__File_System_pre_h
 
+#define XRAD_STANDALONE_COMPLEX 0
 #include <XRADBasic/Core.h>
 
 #endif // XRAD__File_System_pre_h
