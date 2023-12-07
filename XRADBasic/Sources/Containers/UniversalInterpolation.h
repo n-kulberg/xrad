@@ -137,13 +137,13 @@ class	HilbertFilterGenerator : public InterpolationFilterGenerator<FilterKernelR
 {
 		PARENT(InterpolationFilterGenerator<FilterKernelReal>);
 		HilbertFilterGenerator() = delete; //private, not allowed to call
-		const ComplexNumberPart complex_number_part;
+		const complex_number_part m_complex_number_part;
 	public:
 		typedef HilbertFilterGenerator self;
 		typedef FilterKernelReal filter_type;
 		using parent::filter_order;
 	public:
-		HilbertFilterGenerator(int in_filter_order, ComplexNumberPart cp);
+		HilbertFilterGenerator(int in_filter_order, complex_number_part cp);
 		double	GenerateFilter(filter_type &filter, double x) const;
 };
 

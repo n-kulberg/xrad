@@ -7,7 +7,7 @@
 #define XRAD__WinogradShortFFT_h
 //--------------------------------------------------------------
 
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 #include "FourierDefs.h"
 
 XRAD_BEGIN

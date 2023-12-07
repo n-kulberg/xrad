@@ -90,7 +90,7 @@ inline	void iir_one_point(uint8_t& result, const uint8_t& b0, const int& a)
 // здесь нужен отдельный тип для скаляров, т.к. целочисленные данные умножаются в алгоритме
 // на целое со сдвигом. а ST для них может быть с плавающей запятой
 template<class T, class ST, class ST2>
-inline	void iir_one_point(ComplexSample<T, ST> &result, const ComplexSample<T, ST> &b0, const ST2 &a)
+inline	void iir_one_point(complex_sample<T, ST> &result, const complex_sample<T, ST> &b0, const ST2 &a)
 {
 	iir_one_point(result.re, b0.re, a);
 	iir_one_point(result.im, b0.im, a);

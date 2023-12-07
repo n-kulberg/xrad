@@ -13,7 +13,7 @@
 //--------------------------------------------------------------
 
 #include "Sources/Containers/LinearVector.h"
-#include "Sources/SampleTypes/ComplexSample.h"
+#include "Sources/SampleTypes/complex_sample.h"
 #include "Sources/Algebra/ComplexFieldElement.h"
 
 XRAD_BEGIN

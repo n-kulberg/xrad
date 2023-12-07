@@ -27,7 +27,7 @@ namespace	AlgebraicStructures
 
 // для комплексной алгебры
 // третий аргумент шаблона CT -- не комплексный тип, а тип комплексной компоненты
-// порождается тип ComplexSample<CT>
+// порождается тип complex_sample<CT>
 #define XRAD__template_1C class CONTAINER_T, class CHILD_T, class VT, class ST, class ALGORITHMS_T
 #define XRAD__template_2C class CONTAINER_T2, class CHILD_T_2, class VT2, class ST2, class ALGORITHMS_T2
 
@@ -52,7 +52,7 @@ class AlgebraElement<XRAD__template_1C_args> : public GenericAlgebraElement<XRAD
 
 	public:
 		typedef VT value_type;
-		typedef ComplexFieldTraits<ComplexSample<double, double>>::complex_component_type debug_type__;
+		typedef ComplexFieldTraits<complex_sample<double, double>>::complex_component_type debug_type__;
 		typedef typename ComplexFieldTraits<VT>::complex_component_type complex_component_type;
 		typedef ST scalar_type;
 		using algorithms_type = typename parent::algorithms_type;

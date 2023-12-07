@@ -84,7 +84,7 @@ using ColorImageMD_F64 = ColorContainer<MathFunctionMD<ColorImageF64>, RealFunct
 
 //typedef ComplexFunctionMD<complexI8, int> ComplexFunctionMD_I8;
 	// Типы, такие как ComplexFunctionMD<complexI8, int>, требуют, вероятно,
-	// использования ComplexSample<int8_t, int>. Иначе не компилируется шаблон GenericAlgebraElement:
+	// использования complex_sample<int8_t, int>. Иначе не компилируется шаблон GenericAlgebraElement:
 	// FieldElement требует соответствия scalar type у ComplexSamle и у самого FieldElement.
 typedef ComplexFunctionMD<complexI8F, double> ComplexFunctionMD_I8F;
 typedef ComplexFunctionMD<complexI16, int> ComplexFunctionMD_I16;

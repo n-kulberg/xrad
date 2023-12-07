@@ -23,7 +23,7 @@
 //--------------------------------------------------------------
 
 #include "FieldElement.h"
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 
 XRAD_BEGIN
 namespace	AlgebraicStructures
@@ -43,10 +43,10 @@ struct FieldTagComplex
 };
 
 /*!
-	\brief Специализация для ComplexSample: задает комплексную раелизацию FieldElement
+	\brief Специализация для complex_sample: задает комплексную раелизацию FieldElement
 */
 template<class T1, class T2>
-struct FieldTraits<ComplexSample<T1, T2> >: FieldTagComplex {};
+struct FieldTraits<complex_sample<T1, T2> >: FieldTagComplex {};
 
 /*!
 	\brief Шаблонный класс-помощник для реализации FieldElementMath<..., FieldTagComplex>,
@@ -55,7 +55,7 @@ struct FieldTraits<ComplexSample<T1, T2> >: FieldTagComplex {};
 	Общий шаблон не используется, используются специализации.
 
 	Специализации должны определять тип "complex_component_type", равный используемому
-	типу компоненты комплексного числа: PT у ComplexSample<PT,ST>.
+	типу компоненты комплексного числа: PT у complex_sample<PT,ST>.
 
 	Параметр class Conditional = void нужен для условной перегрузки шаблона
 	(с помощью std::enable_if и аналогичных механизмов).
@@ -90,10 +90,10 @@ struct ComplexFieldTraits<T,
 };
 
 /*!
-	\brief Специализация для ComplexSample
+	\brief Специализация для complex_sample
 */
 template<class T1, class T2>
-struct ComplexFieldTraits<ComplexSample<T1, T2>>
+struct ComplexFieldTraits<complex_sample<T1, T2>>
 {
 	using complex_component_type = T1;
 };
@@ -157,17 +157,17 @@ class FieldElementMath<XRAD__fce_template_args, FieldTagComplex> : public Generi
 		//	в т.ч. сопряженное
 
 		template<class T2, class ST2>
-		child_type	&operator *= (const ComplexSample<T2,ST2> &x){return algorithms_type::AS_Op_Assign(child_ref(), x, Functors::multiply_assign());}
+		child_type	&operator *= (const complex_sample<T2,ST2> &x){return algorithms_type::AS_Op_Assign(child_ref(), x, Functors::multiply_assign());}
 		template<class T2, class ST2>
-		child_type	&operator /= (const ComplexSample<T2,ST2> &x){return algorithms_type::AS_Op_Assign(child_ref(), x, Functors::divide_assign());}
+		child_type	&operator /= (const complex_sample<T2,ST2> &x){return algorithms_type::AS_Op_Assign(child_ref(), x, Functors::divide_assign());}
 		template<class T2, class ST2>
-		child_type	&operator %= (const ComplexSample<T2,ST2> &x){return algorithms_type::AS_Op_Assign(child_ref(), x, Functors::percent_assign());}
+		child_type	&operator %= (const complex_sample<T2,ST2> &x){return algorithms_type::AS_Op_Assign(child_ref(), x, Functors::percent_assign());}
 		template<class T2, class ST2>
-		child_type	operator * (const ComplexSample<T2,ST2> &x) const{return algorithms_type::AS_Op_New(child_ref(), x, Functors::assign_multiply());}
+		child_type	operator * (const complex_sample<T2,ST2> &x) const{return algorithms_type::AS_Op_New(child_ref(), x, Functors::assign_multiply());}
 		template<class T2, class ST2>
-		child_type	operator / (const ComplexSample<T2,ST2> &x) const{return algorithms_type::AS_Op_New(child_ref(), x, Functors::assign_divide());}
+		child_type	operator / (const complex_sample<T2,ST2> &x) const{return algorithms_type::AS_Op_New(child_ref(), x, Functors::assign_divide());}
 		template<class T2, class ST2>
-		child_type operator % (const ComplexSample<T2,ST2> &x) const{return algorithms_type::AS_Op_New(child_ref(), x, Functors::assign_percent());}
+		child_type operator % (const complex_sample<T2,ST2> &x) const{return algorithms_type::AS_Op_New(child_ref(), x, Functors::assign_percent());}
 
 		// 3. унарный префиксный оператор комплексного сопряжения, применение по аналогии с унарным "-"
 
@@ -188,7 +188,7 @@ class FieldElementMath<XRAD__fce_template_args, FieldTagComplex> : public Generi
 
 		// Для функтора assign_percent, чтобы это была комплексная операция, оба аргумента должны быть комплексными числами.
 		template<XRAD__template_2, class T3, class ST3>
-		child_type	&multiply_conj(const FieldElementMath<XRAD__template_2_args, FieldTagComplex> &f1, const ComplexSample<T3, ST3> &x)
+		child_type	&multiply_conj(const FieldElementMath<XRAD__template_2_args, FieldTagComplex> &f1, const complex_sample<T3, ST3> &x)
 		{ return algorithms_type::AAS_Op_Assign(child_ref(), f1, x, Functors::assign_percent()); }
 
 		//	Делаем доступными переопределенные здесь родительские методы

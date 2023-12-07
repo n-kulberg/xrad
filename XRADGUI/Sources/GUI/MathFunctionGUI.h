@@ -21,7 +21,7 @@ template<class T>
 typename std::enable_if<std::is_arithmetic<T>::value, DisplayTagScalar>::type GetDisplayTag(T *);
 
 template<class T, class ST>
-DisplayTagComplex GetDisplayTag(ComplexSample<T, ST> *);
+DisplayTagComplex GetDisplayTag(complex_sample<T, ST> *);
 
 template<class T>
 DisplayTagRGB GetDisplayTag(RGBColorSample<T> *);

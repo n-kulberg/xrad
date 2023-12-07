@@ -900,7 +900,7 @@ struct DisplayExtended<DisplayTagScalar>
 		using namespace XRAD_PixelNormalizers;
 		real_data_extended_display_options option = GetExtendedRealDataDisplayOption(title);
 		typedef	typename A2DT::value_type value_type;
-		typedef	ComplexSample<typename std::remove_cv<typename A2DT::value_type>::type, double> complex_type;
+		typedef	complex_sample<typename std::remove_cv<typename A2DT::value_type>::type, double> complex_type;
 		typedef ComplexFunction2D<complex_type, double> complex_buffer_type;
 		complex_buffer_type	buffer;
 

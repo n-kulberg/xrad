@@ -13,7 +13,7 @@
 *********************************************************************/
 
 #include "Sources/Containers/MathMatrix.h"
-#include "Sources/SampleTypes/ComplexSample.h"
+#include "Sources/SampleTypes/complex_sample.h"
 #include "LinearVectorTypes.h"
 
 XRAD_BEGIN

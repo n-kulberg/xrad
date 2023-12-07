@@ -23,7 +23,7 @@ namespace MatrixVectorGUIAuxiliaries
 {
 
 template<class T, class ST>
-string	VectorShowText(const DataArray<ComplexSample<T, ST> > &v, double factor)
+string	VectorShowText(const DataArray<complex_sample<T, ST> > &v, double factor)
 {
 	string	result = "[";
 	for (size_t i = 0; i < v.size(); ++i)

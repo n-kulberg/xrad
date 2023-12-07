@@ -65,9 +65,9 @@ namespace FFTPrimitives
 //--------------------------------------------------------------
 
 template<class T, class ST>
-void	FT_template(ComplexSample<T, ST> *ptr, size_t size, ftDirection direction)
+void	FT_template(complex_sample<T, ST> *ptr, size_t size, ftDirection direction)
 {
-	typedef	ComplexFunction<ComplexSample<T, ST>, ST> cf_type;
+	typedef	ComplexFunction<complex_sample<T, ST>, ST> cf_type;
 	cf_type	original;
 	original.UseData(ptr, size);
 	cf_type	phasors(size);

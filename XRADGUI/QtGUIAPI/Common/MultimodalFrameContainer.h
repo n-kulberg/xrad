@@ -66,7 +66,7 @@ struct	brightness_correction_functor
 		}
 
 		template<class T1, class ST>
-		void operator()(pixel_component_t &x, const ComplexSample<T1,ST> &y) const {transform(x, cabs(y));}
+		void operator()(pixel_component_t &x, const complex_sample<T1,ST> &y) const {transform(x, cabs(y));}
 };
 
 

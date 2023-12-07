@@ -253,7 +253,7 @@ complex_interpolator_container CalculateSincDerivativeCarrierInterpolator(size_t
 
 //--------------------------------------------------------------
 
-real_interpolator_container CalculateSincHilbertInterpolator(size_t filter_order, double x, ComplexNumberPart complex_number_part)
+real_interpolator_container CalculateSincHilbertInterpolator(size_t filter_order, double x, complex_number_part cp)
 {
 	// комментарий от старой версии фильтра (во многом не соответствует текущей, но оставляю,
 	// так как что-то может пригодиться при точной настройке фильтра
@@ -306,12 +306,13 @@ real_interpolator_container CalculateSincHilbertInterpolator(size_t filter_order
 		double	phase = -two_pi()*carrier*dx;
 		//double	phase = two_pi()*carrier*dx;
 
-		switch(complex_number_part)
+		switch(cp)
 		{
-			case real_part:
+		case complex_number_part::real:
 				result[i] = magnitude * cos(phase);
 				break;
-			case imag_part:
+
+		case complex_number_part::imag:
 				result[i] = magnitude * sin(phase);
 				break;
 		};

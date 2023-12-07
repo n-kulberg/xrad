@@ -10,7 +10,7 @@
 #ifndef XRAD__File_DataIOTypesHelpers_h
 #define XRAD__File_DataIOTypesHelpers_h
 
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 #include <XRADBasic/Sources/SampleTypes/ColorSample.h>
 #include <XRADBasic/Core.h>
 
@@ -110,7 +110,7 @@ template <class CT>
 class io_type_complex
 {
 public:
-	typedef ComplexSample<typename CT::value_type, double> value_type;
+	typedef complex_sample<typename CT::value_type, double> value_type;
 	static size_t fsize(){ return sizeof(value_type); }
 
 	static complexF64 get(const uint8_t *data)

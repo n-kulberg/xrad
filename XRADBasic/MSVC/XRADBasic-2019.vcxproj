@@ -389,8 +389,8 @@
     <ClInclude Include="..\Sources\SampleTypes\BooleanSample.h" />
     <ClInclude Include="..\Sources\SampleTypes\ColorSample.h" />
     <ClInclude Include="..\Sources\SampleTypes\ColorSample.hh" />
-    <ClInclude Include="..\Sources\SampleTypes\ComplexSample.h" />
-    <ClInclude Include="..\Sources\SampleTypes\ComplexSample.hh" />
+    <ClInclude Include="..\Sources\SampleTypes\complex_sample.h" />
+    <ClInclude Include="..\Sources\SampleTypes\complex_sample.hh" />
     <ClInclude Include="..\Sources\SampleTypes\FixedPointSample.h" />
     <ClInclude Include="..\Sources\SampleTypes\HLSColorSample.h" />
     <ClInclude Include="..\Sources\SampleTypes\HomomorphSamples.h" />

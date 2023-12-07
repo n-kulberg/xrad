@@ -10,13 +10,13 @@
 #ifndef XRAD__File_ShowComplex_h
 #define XRAD__File_ShowComplex_h
 
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 #include "XRADGUI.h"
 
 XRAD_BEGIN
 
 template<class CT, class ST>
-void	ShowComplex(const string &title, const ComplexSample<CT,ST>&x)
+void	ShowComplex(const string &title, const complex_sample<CT,ST>&x)
 {
 	string	re_im = ssprintf("Complex number:\nParts (re,im) =\t(%g,\t%g)", double(real(x)), double(imag(x)));
 	string	r_fi = ssprintf("\nPolar (r,fi) =\t(%g,\t%g*pi)", double(cabs(x)), double(arg(x))/pi());

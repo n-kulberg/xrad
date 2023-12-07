@@ -29,7 +29,7 @@ real_interpolator_container CalculateBSpline(size_t spline_order, double x);
 real_interpolator_container CalculateISpline(size_t spline_order, double x);
 real_interpolator_container CalculateSincInterpolator(size_t filter_order, double x);
 real_interpolator_container CalculateSincDerivativeInterpolator(size_t filter_order, double x);
-real_interpolator_container CalculateSincHilbertInterpolator(size_t filter_order, double x, ComplexNumberPart complex_number_part);
+real_interpolator_container CalculateSincHilbertInterpolator(size_t filter_order, double x, complex_number_part cp);
 complex_interpolator_container CalculateSincDerivativeCarrierInterpolator(size_t filter_order, double x, double carrier);
 
 

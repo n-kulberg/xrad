@@ -14,7 +14,7 @@
 #include "Sources/Core/Limits.h"
 #include "Sources/Core/NumberTraits.h"
 #include "Sources/SampleTypes/HomomorphSamples.h"
-#include "Sources/SampleTypes/ComplexSample.h"
+#include "Sources/SampleTypes/complex_sample.h"
 #include "Sources/SampleTypes/BooleanSample.h"
 #include "Sources/SampleTypes/ColorSample.h" //этого не следует здесь включать, т.к. зависит от вектора
 

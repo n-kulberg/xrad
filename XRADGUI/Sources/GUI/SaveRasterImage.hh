@@ -30,7 +30,7 @@ public:
 	RGBColorSample<T1>	operator()(RGBColorSample<T1> &y, const RGBColorSample<T2> &x) const { return y = RGBColorSample<T1>(scale(x.red()), scale(x.green()), scale(x.blue())); }
 
 	template<class T1, class T2, class ST>
-	T1	operator()(T1 &y, const ComplexSample<T2, ST> &x) const { return y = T1(scale(cabs(x))); }
+	T1	operator()(T1 &y, const complex_sample<T2, ST> &x) const { return y = T1(scale(cabs(x))); }
 };
 
 template<class T>

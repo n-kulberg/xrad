@@ -6,7 +6,7 @@
 #ifndef XRAD__File_special_function_h
 #define XRAD__File_special_function_h
 
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 
 XRAD_BEGIN
 

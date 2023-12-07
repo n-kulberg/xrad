@@ -608,12 +608,6 @@
     <ClInclude Include="..\Sources\SampleTypes\ColorSample.hh">
       <Filter>Sources\SampleTypes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\SampleTypes\ComplexSample.h">
-      <Filter>Sources\SampleTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\SampleTypes\ComplexSample.hh">
-      <Filter>Sources\SampleTypes</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\SampleTypes\HLSColorSample.h">
       <Filter>Sources\SampleTypes</Filter>
     </ClInclude>
@@ -748,6 +742,12 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\numbers_in_string.h">
       <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SampleTypes\complex_sample.h">
+      <Filter>Sources\SampleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\SampleTypes\complex_sample.hh">
+      <Filter>Sources\SampleTypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

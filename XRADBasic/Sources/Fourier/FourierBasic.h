@@ -12,7 +12,7 @@
 //--------------------------------------------------------------
 
 #include "FourierDefs.h"
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 
 //--------------------------------------------------------------
 /*

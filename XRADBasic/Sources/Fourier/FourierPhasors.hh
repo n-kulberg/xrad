@@ -6,7 +6,7 @@
 // file FourierPhasors.hh
 //--------------------------------------------------------------
 
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 
 XRAD_BEGIN
 

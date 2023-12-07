@@ -8,7 +8,7 @@
 
 
 #include <XRADBasic/Sources/SampleTypes/ColorSample.h>
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 
 XRAD_BEGIN
 
@@ -76,9 +76,9 @@ class	TableInterpolator
 
 
 		template<class T, class ST>
-		ComplexSample<T,ST> multiply(const ComplexSample<T,ST> &ij, const ComplexSample<T,ST> &i_j, const ComplexSample<T,ST> &ij_, const ComplexSample<T,ST> &i_j_) const
+		complex_sample<T,ST> multiply(const complex_sample<T,ST> &ij, const complex_sample<T,ST> &i_j, const complex_sample<T,ST> &ij_, const complex_sample<T,ST> &i_j_) const
 			{
-			return ComplexSample<T,ST>(
+			return complex_sample<T,ST>(
 				multiply(ij.re, i_j.re, ij_.re, i_j_.re),
 				multiply(ij.im, i_j.im, ij_.im, i_j_.im));
 			}

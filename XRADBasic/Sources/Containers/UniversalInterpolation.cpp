@@ -127,7 +127,7 @@ double	SincDerivativeComplexFilterGenerator::GenerateFilter(FilterKernelComplex 
 //	функции sin(x)/x
 //
 
-HilbertFilterGenerator::HilbertFilterGenerator(int fo, ComplexNumberPart cp) : InterpolationFilterGenerator<FilterKernelReal>(fo), complex_number_part(cp)
+HilbertFilterGenerator::HilbertFilterGenerator(int fo, complex_number_part cp) : InterpolationFilterGenerator<FilterKernelReal>(fo), m_complex_number_part(cp)
 {
 }
 
@@ -135,7 +135,7 @@ double	HilbertFilterGenerator::GenerateFilter(FilterKernelReal &filter, double x
 {
 	filter.realloc(filter_order);
 
-	real_interpolator_container	f = CalculateSincHilbertInterpolator(filter_order, x, complex_number_part);
+	real_interpolator_container	f = CalculateSincHilbertInterpolator(filter_order, x, m_complex_number_part);
 	//f -= AverageValue(f);
 	// В отличие от простого интерполятора, условие нормировки
 	// здесь -- нулевая сумма всех элементов.
@@ -264,11 +264,11 @@ interpolators::interpolators()
 
 	//	Преобразование Гильберта (недописано)
 
-	hilbert_re.InitFilters(default_interpolation_factor, HilbertFilterGenerator(16, real_part));
-	hilbert_im.InitFilters(default_interpolation_factor, HilbertFilterGenerator(16, imag_part));
+	hilbert_re.InitFilters(default_interpolation_factor, HilbertFilterGenerator(16, complex_number_part::real));
+	hilbert_im.InitFilters(default_interpolation_factor, HilbertFilterGenerator(16, complex_number_part::imag));
 
-	hilbert_re8.InitFilters(default_interpolation_factor, HilbertFilterGenerator(8, real_part));
-	hilbert_im8.InitFilters(default_interpolation_factor, HilbertFilterGenerator(8, imag_part));
+	hilbert_re8.InitFilters(default_interpolation_factor, HilbertFilterGenerator(8, complex_number_part::real));
+	hilbert_im8.InitFilters(default_interpolation_factor, HilbertFilterGenerator(8, complex_number_part::imag));
 }
 
 namespace

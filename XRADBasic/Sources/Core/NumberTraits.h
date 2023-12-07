@@ -53,7 +53,7 @@
 //	для всех остальных определения помещаются сразу вслед за определением класса.
 //	это классы:
 //
-//	ComplexSample
+//	complex_sample
 //	ColorSample
 //	ColorPixel(частично -- см. комментарий в конце файла ColorSample.h)
 //	DataArray<>

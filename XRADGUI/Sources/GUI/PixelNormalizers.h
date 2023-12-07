@@ -7,7 +7,7 @@
 #define XRAD__File_PixelNormalizers_h
 
 #include <XRADBasic/Sources/Containers/SpaceCoordinates.h>
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 #include <XRADBasic/Sources/SampleTypes/ColorSample.h>
 
 //--------------------------------------------------------------
@@ -52,7 +52,7 @@ class	pixel_normalizer
 		double	rectify_abs(float x) const				{return fabs(x);}
 		double	rectify_abs(double x) const				{return fabs(x);}
 		template<class T1, class ST1>
-			double	rectify_abs(const ComplexSample<T1,ST1> &x) const	{return cabs(x);}
+			double	rectify_abs(const complex_sample<T1,ST1> &x) const	{return cabs(x);}
 // 		double	rectify_abs(const complexF32 &x) const	{return cabs(x);}
 
 		double	rectify_db(const int &x) const		{return amplitude_to_decibel(x);}

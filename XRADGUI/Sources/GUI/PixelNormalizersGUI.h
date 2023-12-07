@@ -25,7 +25,7 @@ namespace XRAD_PixelNormalizers
 // 	double scalarize(const T&x){return double(x);}
 //
 // template<class T>
-// 	double scalarize(const ComplexSample<T>&x){return cabs(x);}
+// 	double scalarize(const complex_sample<T>&x){return cabs(x);}
 
 enum color_rectifier_id_t
 {

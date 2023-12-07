@@ -16,7 +16,7 @@
 #include "FourierPhasors.h"
 #include "FourierDefs.h"
 #include <XRADBasic/Sources/Containers/DataArray.h>
-#include <XRADBasic/Sources/SampleTypes/ComplexSample.h>
+#include <XRADBasic/Sources/SampleTypes/complex_sample.h>
 #include <memory>
 #include <vector>
 #include <mutex>
